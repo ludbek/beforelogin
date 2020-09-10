@@ -1,21 +1,20 @@
 function openWarningPage({pwdFieldCount, origin}) {
 	chrome.tabs.query({'active': true}, function(tabs) {
-		const activeTab = tabs[0].id
+		const {id, index} = tabs[0]
 		const warningPageUrl = chrome.extension.getURL('warning.html')
-		const fullUrl = `${warningPageUrl}?origin=${origin}&tab=${activeTab}&pwdFieldCount=${pwdFieldCount}`
-		chrome.tabs.create({url: fullUrl, active: true})
+		const fullUrl = `${warningPageUrl}?origin=${origin}&tab=${id}&pwdFieldCount=${pwdFieldCount}`
+		chrome.tabs.create({url: fullUrl, active: true, index: index + 1})
 	});
 }
 
 function checkPhising({url, origin, pwdFieldCount}) {
 	chrome.history.search({text: origin, startTime: 0, maxResults: 99999}, (visits) => {
-		// openWarningPage({pwdFieldCount, origin})
 		if(visits.length === 1) {
 			return openWarningPage({pwdFieldCount, origin})
 		}
 
 		chrome.history.getVisits({url}, (visits) => {
-			if(visits.length === 1) {
+			if(visits.length === 1 && pwdFieldCount > 0) {
 				return openWarningPage({pwdFieldCount, origin})
 			}
 		})
