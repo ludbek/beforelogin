@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "build": "parcel build --no-content-hash src/*.js src/*.html --out-dir build/"
+  },
+  "dependencies": {
+    "preact": "^10.4.8"
+  },
+  "devDependencies": {
+    "cssnano": "^4.1.10"
+  }
+}

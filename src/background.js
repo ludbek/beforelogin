@@ -9,6 +9,7 @@ function openWarningPage({pwdFieldCount, origin}) {
 
 function checkPhising({url, origin, pwdFieldCount}) {
 	chrome.history.search({text: origin, startTime: 0, maxResults: 99999}, (visits) => {
+    return openWarningPage({pwdFieldCount, origin})
 		if(visits.length === 1) {
 			return openWarningPage({pwdFieldCount, origin})
 		}

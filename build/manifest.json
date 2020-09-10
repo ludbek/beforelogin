@@ -1,9 +1,10 @@
   {
-    "name": "Getting Started Example",
+    "name": "Before login",
     "version": "1.0",
-    "description": "Build an Extension!",
-    "permissions": ["activeTab", "storage", "declarativeContent", "history"],
+    "description": "The sixth sense for phising.",
+    "permissions": ["activeTab", "storage", "declarativeContent", "history", "tabs"],
     "options_page": "options.html",
+    "web_accessible_resources": ["*.js.map"],
     "background": {
       "scripts": ["background.js"],
       "persistent": false

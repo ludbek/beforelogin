@@ -1,2 +1,7 @@
 specs.txt
 .DS_Store
+build/*.map
+build/*.html
+build/*.js
+node_modules/
+.cache/
