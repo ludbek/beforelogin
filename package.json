@@ -3,9 +3,10 @@
     "build": "parcel build --no-content-hash src/*.js src/*.html --out-dir build/"
   },
   "dependencies": {
-    "preact": "^10.4.8"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "cssnano": "^4.1.10"
+    "parcel-bundler": "^1.6.1"
   }
 }

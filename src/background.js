@@ -1,3 +1,13 @@
+import { filterByOrigin } from './shared/filterByOrigin'
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.sync.set({
+    warnOnNewSite: true,
+    warnOnNewLoginPage: true,
+    warnOnEveryLoginPage: false
+  })
+})
+
 function openWarningPage({pwdFieldCount, origin}) {
 	chrome.tabs.query({'active': true}, function(tabs) {
 		const {id, index} = tabs[0]
@@ -9,8 +19,9 @@ function openWarningPage({pwdFieldCount, origin}) {
 
 function checkPhising({url, origin, pwdFieldCount}) {
 	chrome.history.search({text: origin, startTime: 0, maxResults: 99999}, (visits) => {
+    const trueVisits = filterByOrigin({origin, visits})
     return openWarningPage({pwdFieldCount, origin})
-		if(visits.length === 1) {
+		if(trueVisits.length === 1) {
 			return openWarningPage({pwdFieldCount, origin})
 		}
 

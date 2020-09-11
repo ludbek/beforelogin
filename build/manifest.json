@@ -2,7 +2,13 @@
     "name": "Before login",
     "version": "1.0",
     "description": "The sixth sense for phising.",
-    "permissions": ["activeTab", "storage", "declarativeContent", "history", "tabs"],
+    "permissions": [
+      "activeTab",
+      "storage",
+      "declarativeContent",
+      "history",
+      "tabs"
+    ],
     "options_page": "options.html",
     "web_accessible_resources": ["*.js.map"],
     "background": {
