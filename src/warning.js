@@ -30,7 +30,7 @@ function ActionRow ({origin, tabId}) {
           className="text-lg shadow-md p-2 bg-red-500 rounded-md text-white"
           onClick={removeHistory({origin, tabId})}
         >
-          I dont know this site
+          I don't trust this site
         </button>
       </div>
       <div className="flex-1 text-right">
@@ -38,19 +38,11 @@ function ActionRow ({origin, tabId}) {
           className="text-lg shadow-md p-2 bg-green-500 rounded-md text-white"
           onClick={closeThisTab}
         >
-          I know this site
+          I trust this site
         </button>
       </div>
     </div>
   )
-}
-
-function FirstTimeSiteMsg() {
-
-}
-
-function FirstTimePageMsg() {
-
 }
 
 const App = function () {
@@ -72,10 +64,14 @@ const App = function () {
 
   return (
     <div className='flex-grow md:max-w-3xl max-w-md shadow-md p-5 rounded-md bg-white'>
-      <a className='text-blue-500 text-3xl' href={origin}>{origin}</a>
       {header}
-      <p className="text-xl">Before you enter any sensitive information (password, date of birth, card number), we highly recommend you to make sure this is not a fake website</p>
-      <p className="text-xl">To spot a fake website we suggest you to 1. check the domain of the website 2. explore the site to make sure it is what you think it is.</p>
+      <a className='text-blue-500 text-3xl mb-5' href={origin}>{origin}</a>
+      <div className="text-xl mb-3">Before you enter any sensitive information (password, card number), we highly recommend you to make sure this is not a fake website</div>
+      <div className="mb-3">
+        <p className="text-xl">To spot a fake website we suggest you to</p>
+        <p className="text-xl">1. check the domain of the website</p>
+        <p className="text-xl">2. explore the site to make sure it is what you think it is.</p>
+      </div>
       <ActionRow origin={origin} tabId={tabId} />
     </div>
   )
