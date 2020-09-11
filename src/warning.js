@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { filterByOrigin } from './shared/filterByOrigin'
 import { Header } from './components/header'
+import { WARN_ON_NEW_SITE, WARN_ON_NEW_FORM_PAGE, WARN_ON_EVERY_FORM_PAGE  } from './shared/constants'
 
 function closeThisTab () {
   window.close()
@@ -44,17 +45,37 @@ function ActionRow ({origin, tabId}) {
   )
 }
 
+function FirstTimeSiteMsg() {
+
+}
+
+function FirstTimePageMsg() {
+
+}
+
 const App = function () {
   const searchParams = new URLSearchParams(window.location.search)
   const origin = searchParams.get('origin')
   const tabId = searchParams.get('tab')
+  const type = searchParams.get('type')
+  let header
+
+  if(type === WARN_ON_NEW_FORM_PAGE) {
+    header = <Header>Careful, you are visiting this sensitive page for the first time.</Header>
+  }
+  else if(type === WARN_ON_EVERY_FORM_PAGE) {
+    header = <Header>Careful, this page collects sensitive information.</Header>
+  }
+  else {
+    header = <Header>Careful, you are visiting this site for the first time.</Header>
+  }
 
   return (
     <div className='flex-grow md:max-w-3xl max-w-md shadow-md p-5 rounded-md bg-white'>
-      <Header>You haven't visited this site before.</Header>
-      <p>Before you enter any sensitive information (password, date of birth, card number), we highly recommend you to make sure this is not a fake website</p>
-      <p>To spot a fake website we suggest you to 1. check the domain of the website 2. explore the site to make sure it is what you think it is.</p>
-      <p>The site is <a className='text-blue-500' href="google.com">{origin}</a>.</p>
+      <a className='text-blue-500 text-3xl' href={origin}>{origin}</a>
+      {header}
+      <p className="text-xl">Before you enter any sensitive information (password, date of birth, card number), we highly recommend you to make sure this is not a fake website</p>
+      <p className="text-xl">To spot a fake website we suggest you to 1. check the domain of the website 2. explore the site to make sure it is what you think it is.</p>
       <ActionRow origin={origin} tabId={tabId} />
     </div>
   )

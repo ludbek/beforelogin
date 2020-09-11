@@ -46,8 +46,8 @@ function App() {
     <Container>
       <Header>Settings</Header>
       <Setting node='warnOnNewSite' text='Warn me when I visit a new site.' />
-      <Setting node='warnOnNewLoginPage' text='Warn me when I visit a login page for the first time.' />
-      <Setting node='warnOnEveryLoginPage' text='Warn me every time I visit a login page.' />
+      <Setting node='warnOnNewLoginPage' text='Warn me when I visit a form with password field for the first time.' />
+      <Setting node='warnOnEveryLoginPage' text='Warn me every time I visit a form with password field.' />
     </Container>
   )
 }

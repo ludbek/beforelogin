@@ -1,7 +1,7 @@
   {
     "name": "Before login",
     "version": "1.0",
-    "description": "The sixth sense for phising.",
+    "description": "The sixth sense against Phishing attacks.",
     "permissions": [
       "activeTab",
       "storage",
