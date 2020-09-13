@@ -1,5 +1,10 @@
-import { filterByOrigin } from './shared/filterByOrigin'
-import { WARN_ON_NEW_SITE, WARN_ON_NEW_FORM_PAGE, WARN_ON_EVERY_FORM_PAGE  } from './shared/constants'
+import { filterByOrigin, getOrigin, mapOrigins } from './shared/misc'
+import {
+  WARN_ON_NEW_SITE,
+  WARN_ON_NEW_FORM_PAGE,
+  WARN_ON_EVERY_FORM_PAGE,
+  BOOKMARKS
+} from './shared/constants'
 
 chrome.runtime.onInstalled.addListener(() => {
   // todo skip is settings already exists
@@ -23,8 +28,11 @@ function checkPhishing({url, origin, pwdFieldCount}) {
   chrome.storage.sync.get([
     WARN_ON_NEW_SITE,
     WARN_ON_NEW_FORM_PAGE,
-    WARN_ON_EVERY_FORM_PAGE
-  ], ({warnOnNewSite, warnOnNewFormPage, warnOnEveryFormPage}) => {
+    WARN_ON_EVERY_FORM_PAGE,
+    BOOKMARKS,
+  ], ({warnOnNewSite, warnOnNewFormPage, warnOnEveryFormPage, bookmarks}) => {
+    if(mapOrigins(bookmarks).includes(getOrigin(origin))) return
+
     chrome.history.search({text: origin, startTime: 0, maxResults: 99999}, (visits) => {
       const trueVisits = filterByOrigin({origin, visits})
       // user visits a site for the first time
@@ -47,7 +55,7 @@ function checkPhishing({url, origin, pwdFieldCount}) {
 }
 
 chrome.runtime.onMessage.addListener(
-	function(request, sender, sendResponse) {
+	function(request, sender) {
 		if(!sender.tab) return
 
 		const { url, origin } = sender

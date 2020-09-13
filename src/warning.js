@@ -1,24 +1,36 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { filterByOrigin } from './shared/filterByOrigin'
+import { filterByOrigin } from './shared/misc'
 import { Header } from './components/header'
 import { WARN_ON_NEW_SITE, WARN_ON_NEW_FORM_PAGE, WARN_ON_EVERY_FORM_PAGE  } from './shared/constants'
 
+const searchParams = new URLSearchParams(window.location.search)
+const origin = searchParams.get('origin')
+const tabId = parseInt(searchParams.get('tab'), 10)
+const type = searchParams.get('type')
+
 function closeThisTab () {
-  window.close()
+  tabId && chrome.tabs.update(tabId, {active: true}, () => {
+    window.close()
+  })
 }
 
 function removeHistory({origin, tabId}) {
   return () => {
     alert(`This will remove all the histories related to ${origin}.`)
-    chrome.tabs.remove(parseInt(tabId, 10))
+    tabId && chrome.tabs.remove(tabId)
     chrome.history.search({text: origin, startTime: 0, maxResults: 99999}, (visits) => {
-      filterByOrigin({origin, visits}).forEach(({url}) => {
-        console.log({url})
-        chrome.history.deleteUrl({url})
+      const trueVisits = filterByOrigin({origin, visits})
+      let count = 0
+      trueVisits.forEach(({url}) => {
+        chrome.history.deleteUrl({url}, () => {
+          count = count + 1
+          if(count === trueVisits.length) {
+            closeThisTab()
+          }
+        })
       })
     })
-    // closeThisTab()
   }
 }
 
@@ -46,10 +58,6 @@ function ActionRow ({origin, tabId}) {
 }
 
 const App = function () {
-  const searchParams = new URLSearchParams(window.location.search)
-  const origin = searchParams.get('origin')
-  const tabId = searchParams.get('tab')
-  const type = searchParams.get('type')
   let header
 
   if(type === WARN_ON_NEW_FORM_PAGE) {
