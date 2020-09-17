@@ -8,7 +8,7 @@
       "tabs"
     ],
     "options_page": "options.html",
-    "web_accessible_resources": ["*.js.map"],
+    "web_accessible_resources": ["*.js.map", "images/*.png"],
     "background": {
       "scripts": ["background.js"],
       "persistent": false

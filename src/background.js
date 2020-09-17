@@ -1,9 +1,16 @@
-import { filterByOrigin, getOrigin, mapOrigins } from './shared/misc'
+import {
+  filterByOrigin,
+  getOrigin,
+  mapOrigins,
+  tickIcon,
+  setDefaultIcon,
+} from './shared/misc'
 import {
   WARN_ON_NEW_SITE,
   WARN_ON_NEW_FORM_PAGE,
   WARN_ON_EVERY_FORM_PAGE,
-  BOOKMARKS
+  BOOKMARKS,
+  ACTIVE_TAB,
 } from './shared/constants'
 
 chrome.runtime.onInstalled.addListener(() => {
@@ -24,14 +31,17 @@ function openWarningPage({pwdFieldCount, origin, type}) {
 	});
 }
 
-function checkPhishing({url, origin, pwdFieldCount}) {
+function checkPhishing({url, origin, pwdFieldCount, tabId}) {
   chrome.storage.sync.get([
     WARN_ON_NEW_SITE,
     WARN_ON_NEW_FORM_PAGE,
     WARN_ON_EVERY_FORM_PAGE,
     BOOKMARKS,
   ], ({warnOnNewSite, warnOnNewFormPage, warnOnEveryFormPage, bookmarks}) => {
-    if(mapOrigins(bookmarks).includes(getOrigin(origin))) return
+    if(mapOrigins(bookmarks).includes(getOrigin(origin))) {
+      tickIcon(tabId)
+      return
+    }
 
     chrome.history.search({text: origin, startTime: 0, maxResults: 99999}, (visits) => {
       const trueVisits = filterByOrigin({origin, visits})
@@ -60,6 +70,29 @@ chrome.runtime.onMessage.addListener(
 
 		const { url, origin } = sender
 		const { pwdFieldCount } = request
-		checkPhishing({url, origin, pwdFieldCount})
+    const { id: tabId } = sender.tab
+		checkPhishing({url, origin, pwdFieldCount, tabId})
 	}
 )
+
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+  chrome.storage.sync.set({[ACTIVE_TAB]: activeInfo})
+})
+
+chrome.storage.onChanged.addListener(() => {
+  chrome.storage.sync.get([
+    BOOKMARKS,
+    ACTIVE_TAB
+  ], ({bookmarks, activeTab}) => {
+    chrome.tabs.query({'active': true}, function(tabs) {
+      const {id, url} = tabs[0]
+      if(mapOrigins(bookmarks).includes(getOrigin(url))) {
+        tickIcon(id)
+      }
+      else {
+        setDefaultIcon(id)
+      }
+    })
+  })
+})
+

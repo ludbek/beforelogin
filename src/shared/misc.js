@@ -11,3 +11,17 @@ export function filterByOrigin ({origin, visits}) {
 export function mapOrigins(bookmarks) {
   return bookmarks.map(bookmark => bookmark.origin)
 }
+
+export function tickIcon(tabId) {
+  chrome.browserAction.setIcon({
+    path: '/images/tick-16.png',
+    tabId
+  })
+}
+
+export function setDefaultIcon(tabId) {
+  chrome.browserAction.setIcon({
+    path: '/images/Icon-16.png',
+    tabId
+  })
+}

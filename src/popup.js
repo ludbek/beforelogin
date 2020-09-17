@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { getOrigin, mapOrigins } from './shared/misc'
+import { getOrigin, mapOrigins, markSiteTrusted } from './shared/misc'
 
 const localStore = {
   bookmarks: [],
@@ -39,9 +39,14 @@ function addBookmark(bookmark) {
 }
 
 function Header() {
+  const imgUrl = chrome.runtime.getURL('images/Icon-16.png')
+
   return (
-    <div className="text-center text-xl">
-      Beforelogin
+    <div className="text-center text-xl flex flex-col header m-2">
+      <div>
+        <img className="inline" src={imgUrl} />
+        <span className="ml-2">beforelogin</span>
+      </div>
     </div>
   )
 }
