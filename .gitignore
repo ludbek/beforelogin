@@ -6,3 +6,4 @@ build/*.js
 node_modules/
 .cache/
 yarn-error.log
+beforelogin.zip
