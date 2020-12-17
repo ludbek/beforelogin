@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "parcel build --no-content-hash src/*.js src/*.html --out-dir build/"
+    "build": "parcel build --no-minify --no-content-hash src/*.js src/*.html --out-dir build/"
   },
   "dependencies": {
     "react": "^16.13.1",
