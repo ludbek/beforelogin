@@ -14,11 +14,11 @@ import {
 } from './shared/constants'
 
 chrome.runtime.onInstalled.addListener(() => {
-  // todo skip is settings already exists
   chrome.storage.sync.set({
     [WARN_ON_NEW_SITE]: true,
     [WARN_ON_NEW_FORM_PAGE]: true,
-    [WARN_ON_EVERY_FORM_PAGE]: false
+    [WARN_ON_EVERY_FORM_PAGE]: false,
+    [BOOKMARKS]: []
   })
 })
 
