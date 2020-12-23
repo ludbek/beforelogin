@@ -1,6 +1,6 @@
   {
     "name": "Before login",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "A sixth sense against Phishing attacks.",
     "permissions": [
       "storage",

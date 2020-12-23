@@ -61,7 +61,7 @@ const App = function () {
   let header
 
   if(type === WARN_ON_NEW_FORM_PAGE) {
-    header = <Header>Careful, you are visiting this sensitive page for the first time.</Header>
+    header = <Header>WARNING, you are visiting this sensitive page for the first time.</Header>
   }
   else if(type === WARN_ON_EVERY_FORM_PAGE) {
     header = <Header>Careful, this page collects sensitive information.</Header>

@@ -15,7 +15,7 @@ import {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set({
-    [WARN_ON_NEW_SITE]: true,
+    [WARN_ON_NEW_SITE]: false,
     [WARN_ON_NEW_FORM_PAGE]: true,
     [WARN_ON_EVERY_FORM_PAGE]: false,
     [BOOKMARKS]: []
@@ -43,21 +43,21 @@ function checkPhishing({url, origin, pwdFieldCount, tabId}) {
       return
     }
 
-    chrome.history.search({text: origin, startTime: 0, maxResults: 99999}, (visits) => {
-      const trueVisits = filterByOrigin({origin, visits})
-      // user visits a site for the first time
-      if(warnOnNewSite && trueVisits.length === 1) {
-        return openWarningPage({pwdFieldCount, origin, type: WARN_ON_NEW_SITE})
+    // user visits a login page for the first time
+    chrome.history.getVisits({url}, (visits) => {
+      if(warnOnNewFormPage && visits.length === 1 && pwdFieldCount > 0) {
+        return openWarningPage({pwdFieldCount, origin, type: WARN_ON_NEW_FORM_PAGE})
       }
 
-      if(warnOnNewFormPage && pwdFieldCount > 0) {
-        return openWarningPage({pwdFieldCount, origin, type: WARN_ON_EVERY_FORM_PAGE})
-      }
+      chrome.history.search({text: origin, startTime: 0, maxResults: 99999}, (visits) => {
+        const trueVisits = filterByOrigin({origin, visits})
+        // user visits a site for the first time
+        if(warnOnNewSite && trueVisits.length === 1) {
+          return openWarningPage({pwdFieldCount, origin, type: WARN_ON_NEW_SITE})
+        }
 
-      chrome.history.getVisits({url}, (visits) => {
-        // user visits a login page for the first time
-        if(warnOnEveryFormPage && visits.length === 1 && pwdFieldCount > 0) {
-          return openWarningPage({pwdFieldCount, origin, type: WARN_ON_NEW_FORM_PAGE})
+        if(warnOnEveryFormPage && pwdFieldCount > 0) {
+          return openWarningPage({pwdFieldCount, origin, type: WARN_ON_EVERY_FORM_PAGE})
         }
       })
     })

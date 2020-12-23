@@ -8,3 +8,5 @@ node_modules/
 yarn-error.log
 beforelogin.zip
 build.pem
+web-ext-artifacts/
+build.crx
